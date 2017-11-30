@@ -6,11 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.trello.rxlifecycle.components.support.RxFragment;
+import com.trello.rxlifecycle2.components.RxFragment;
 
 
 /**
- * Created by sunxl8 on 2016/12/21.
+ * Created by sunxl8 on 2017/11/30.
  */
 
 public abstract class BaseFragment extends RxFragment {

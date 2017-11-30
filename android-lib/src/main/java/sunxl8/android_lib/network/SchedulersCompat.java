@@ -1,22 +1,29 @@
 package sunxl8.android_lib.network;
 
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class SchedulersCompat {
 
-    private final static Observable.Transformer ioTransformer = new Observable.Transformer() {
-        @Override
-        public Object call(Object o) {
-            return ((Observable) o).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
-        }
-    };
+    /**
+     * 统一线程处理
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T> FlowableTransformer<T, T> applyIoSchedulers() {
+        return new FlowableTransformer<T, T>() {
+            @Override
+            public Flowable<T> apply(Flowable<T> flowable) {
+                return flowable.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
 
-    public static <T> Observable.Transformer<T, T> applyIoSchedulers() {
-        return (Observable.Transformer<T, T>) ioTransformer;
+        };
     }
+
 }

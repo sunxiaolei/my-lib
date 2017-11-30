@@ -1,13 +1,40 @@
 apply plugin: 'com.android.library'
 
+ext {
+    android = [
+            compileSdkVersion: 27,
+            buildToolsVersion: '27.0.1',
+            minSdkVersion    : 15,
+            targetSdkVersion : 27,
+            versionCode      : 100,
+            versionName      : "1.0.0"
+    ]
+
+    depend = [
+            support   : "27.0.2",
+            retrofit  : "2.3.0",
+            rxJava    : "2.1.7",
+            rxAndroid : "2.0.1",
+            rxLife    : "2.2.1",
+            rxBinding : "2.0.0",
+            gson      : "2.8.2",
+            glide     : "4.3.1",
+            litepal   : "1.6.0",
+            logger    : "2.1.1",
+            permission: "3.0.1",
+            utils     : "1.0.6",
+            stetho    : "1.5.0",
+    ]
+}
+
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    compileSdkVersion android.compileSdkVersion
+    buildToolsVersion android.buildToolsVersion
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 25
-        versionCode 1
-        versionName "0.1.1"
+        minSdkVersion android.minSdkVersion
+        targetSdkVersion android.targetSdkVersion
+        versionCode android.versionCode
+        versionName android.versionName
     }
     buildTypes {
         release {
@@ -19,35 +46,44 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:design:25.0.1'
-    compile 'com.android.support:recyclerview-v7:25.0.1'
-    //retrofit
-    compile 'com.squareup.okhttp3:okhttp:3.3.1'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.retrofit2:converter-scalars:2.0.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile "com.android.support:appcompat-v7:${depend.support}"
+    compile "com.android.support:support-v4:${depend.support}"
+    compile "com.android.support:design:${depend.support}"
+    compile "com.android.support:recyclerview-v7:${depend.support}"
+    //Retrofit
+    compile "com.squareup.retrofit2:retrofit:${depend.retrofit}"
+    compile "com.squareup.retrofit2:converter-gson:${depend.retrofit}"
+    compile "com.squareup.retrofit2:converter-scalars:${depend.retrofit}"
+    compile "com.squareup.retrofit2:adapter-rxjava2:${depend.retrofit}"
     //RxJava
-    compile 'io.reactivex:rxjava:1.1.6'
-    compile 'io.reactivex:rxandroid:1.2.0'
-    //json
-    compile 'com.google.code.gson:gson:2.6.2'
-    //图片加载
-    compile 'com.facebook.fresco:fresco:0.13.0'
-    //数据库
-    compile 'org.litepal.android:core:1.4.0'
+    compile "io.reactivex.rxjava2:rxjava:${depend.rxJava}"
+    compile "io.reactivex.rxjava2:rxandroid:${depend.rxAndroid}"
     //RxLife避免泄漏
-    compile 'com.trello:rxlifecycle:0.8.0'
-    compile 'com.trello:rxlifecycle-components:0.8.0'
+    compile "com.trello.rxlifecycle2:rxlifecycle:${depend.rxLife}"
+    compile "com.trello.rxlifecycle2:rxlifecycle-components:${depend.rxLife}"
+    compile "com.trello.rxlifecycle2:rxlifecycle-android:${depend.rxLife}"
+    compile "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:${depend.rxLife}"
     //RxBinding
-    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-support-v4:0.4.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
+    compile "com.jakewharton.rxbinding2:rxbinding:${depend.rxBinding}"
+    compile "com.jakewharton.rxbinding2:rxbinding-support-v4:${depend.rxBinding}"
+    compile "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${depend.rxBinding}"
+    compile "com.jakewharton.rxbinding2:rxbinding-design:${depend.rxBinding}"
+    compile "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${depend.rxBinding}"
+    //Json
+    compile "com.google.code.gson:gson:${depend.gson}"
+    //图片加载
+    compile "com.github.bumptech.glide:glide:${depend.glide}"
+    annotationProcessor "com.github.bumptech.glide:compiler:${depend.glide}"
+    //数据库
+    compile "org.litepal.android:core:${depend.litepal}"
     //日志
-    compile 'com.orhanobut:logger:1.15'
-
+    compile "com.orhanobut:logger:${depend.logger}"
+    //权限
+    compile "com.github.hotchemi:permissionsdispatcher:${depend.permission}"
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:${depend.permission}"
+    //utils
+    compile "com.github.sunxiaolei:my-utils:${depend.utils}"
+    //调试
+    compile "com.facebook.stetho:stetho:${depend.stetho}"
+    compile "com.facebook.stetho:stetho-okhttp3:${depend.stetho}"
 }

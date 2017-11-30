@@ -1,65 +1,37 @@
 package sunxl8.android_lib.utils;
 
-import rx.Observable;
-import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
-import rx.subjects.Subject;
+
+import io.reactivex.Flowable;
+import io.reactivex.processors.FlowableProcessor;
+import io.reactivex.processors.PublishProcessor;
 
 /**
- * Created by sunxl8 on 2016/11/22.
+ * Created by sunxl8 on 2017/11/30.
  */
 
 public class RxBus {
 
-    private static volatile RxBus mInstance;
-
-    private final Subject bus;
+    private final FlowableProcessor<Object> bus;
 
     private RxBus() {
-        bus = new SerializedSubject<>(PublishSubject.create());
+        bus = PublishProcessor.create().toSerialized();
     }
 
-    /**
-     * 单例模式RxBus
-     *
-     * @return
-     */
-    public static RxBus getInstance() {
+    public static RxBus getDefault() {
+        return RxBusHolder.sInstance;
+    }
 
-        RxBus rxBus = mInstance;
-        if (mInstance == null) {
-            synchronized (RxBus.class) {
-                rxBus = mInstance;
-                if (mInstance == null) {
-                    rxBus = new RxBus();
-                    mInstance = rxBus;
-                }
-            }
-        }
-
-        return rxBus;
+    private static class RxBusHolder {
+        private static final RxBus sInstance = new RxBus();
     }
 
 
-    /**
-     * 发送消息
-     *
-     * @param object
-     */
-    public void post(Object object) {
-
-        bus.onNext(object);
-
+    public void post(Object o) {
+        bus.onNext(o);
     }
 
-    /**
-     * 接收消息
-     *
-     * @param eventType
-     * @param <T>
-     * @return
-     */
-    public <T> Observable<T> onEvent(Class<T> eventType) {
+    public <T> Flowable<T> toFlowable(Class<T> eventType) {
         return bus.ofType(eventType);
     }
+
 }

@@ -15,3 +15,21 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+-keep class org.litepal.** {
+    *;
+}
+-keep class * extends org.litepal.crud.DataSupport {
+    *;
+}

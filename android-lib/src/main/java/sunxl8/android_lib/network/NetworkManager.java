@@ -1,5 +1,6 @@
 package sunxl8.android_lib.network;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -24,7 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetworkManager {
 
     private static Retrofit commonClient;
-    private static Retrofit.Builder commonBuilder;
     private static String lastUrl;
 
     public static Retrofit getCommonClient(String baseUrl) {
@@ -37,14 +37,14 @@ public class NetworkManager {
             commonClient = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .client(getHttpClient(headers))
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         } else if (!lastUrl.equals(baseUrl)) {
             commonClient = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .client(getHttpClient(headers))
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
@@ -84,18 +84,19 @@ public class NetworkManager {
                 .writeTimeout(NetworkConstant.HTTP_WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(NetworkConstant.HTTP_READ_TIMEOUT, TimeUnit.MILLISECONDS);
 
-        builder.addInterceptor(interceptor);
+        builder.addInterceptor(interceptor)
+                .addNetworkInterceptor(new StethoInterceptor());
 
         return builder.build();
     }
 
     private static Headers setHeaders(Map<String, String> headersParams) {
-        Headers headers = null;
+        Headers headers;
         okhttp3.Headers.Builder headersbuilder = new okhttp3.Headers.Builder();
 
         if (headersParams != null) {
             Iterator<String> iterator = headersParams.keySet().iterator();
-            String key = "";
+            String key;
             while (iterator.hasNext()) {
                 key = iterator.next().toString();
                 headersbuilder.add(key, headersParams.get(key));
